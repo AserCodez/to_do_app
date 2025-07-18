@@ -36,7 +36,7 @@ class Clshabits {
    TimeOfDay reminder=TimeOfDay.now();
    DateTime lastCompleted=DateTime.now();
    String notesAboutHabit='';
-   String urGay='';
+   String isrealGay='';
 
  
 IconData get categoryIcon {
