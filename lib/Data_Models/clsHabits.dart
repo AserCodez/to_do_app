@@ -20,7 +20,6 @@ class Clshabits {
    Clshabits({
     required this.nameOfHabit,
     required this.selectedCategory,// Drop down list
-    required this.frequency,//Drop down list
     required this.currentStreak,
     required this.longestStreak,
     required this.reminder,
@@ -30,14 +29,11 @@ class Clshabits {
 
    String nameOfHabit;
    String selectedCategory;
-   EnFrequency frequency=EnFrequency.daily;
    int currentStreak=0;
    int longestStreak=0;
-   TimeOfDay reminder=TimeOfDay.now();
+   TimeOfDay? reminder;
    DateTime lastCompleted=DateTime.now();
    String notesAboutHabit='';
-   String isrealGay='';
-
  
 IconData get categoryIcon {
   switch (this.selectedCategory) {
@@ -61,7 +57,7 @@ IconData get categoryIcon {
       return Icons.error; // Fallback
   }
 }
-
-
-
 }
+
+
+

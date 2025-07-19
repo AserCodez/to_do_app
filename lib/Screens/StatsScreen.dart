@@ -11,42 +11,48 @@ class Statsscreen extends StatefulWidget {
 }
 
 class _StatsscreenState extends State<Statsscreen> {
+  String _order = 'asc';
+      IconData sortIcon = Icons.arrow_upward;
+
+
   void issHabitChecked(Clshabits habit, bool isChecked) {}
 
-  void _sortHabits(bool flag) {
-    if (flag == true) {
+  void _sortHabits() {
+    if (_order == 'asc') {
       setState(() {
         checkedHabits.sort(
           (habit1, habit2) =>
               habit1.lastCompleted.compareTo(habit2.lastCompleted),
         );
+        _changeState();
       });
     } else {
       setState(() {
         checkedHabits.sort(
           (habit1, habit2) =>
-              habit1.lastCompleted.compareTo(habit2.lastCompleted),
+              habit2.lastCompleted.compareTo(habit1.lastCompleted),
         );
+        _changeState();
       });
     }
   }
 
+  void _changeState() {
+    _order = _order == 'asc' ? 'desc' : 'asc';
+  }
+
   @override
   Widget build(BuildContext context) {
-    bool flag = true;
-    IconData sortIcon = Icons.arrow_upward;
 
     return Scaffold(
       body: Column(
         children: [
           TextButton.icon(
-            icon: Icon(sortIcon),
+            icon: Icon(_order=='asc'? Icons.arrow_upward : Icons.arrow_downward ),
             onPressed: () {
-              _sortHabits(flag);
-              flag = false;
-              sortIcon = Icons.arrow_downward;
+              _sortHabits();
             },
-            label: Text(flag ? 'Sort by asc' : 'Sort by desc'),
+            label: Text(_order == 'asc' ? 'Sort by asc' : 'Sort by desc'),
           ),
           Expanded(
             child: Habitscardlister(

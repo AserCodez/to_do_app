@@ -23,7 +23,8 @@ class _HabitsScreenState extends State<HabitsScreen> {
 
   void _addNewHabit() {
     showModalBottomSheet(
-      useSafeArea: true,
+      isScrollControlled: true,
+      useSafeArea: true,//Used to make the overlay cover the whole screen
       context: context,
       builder: (context) => Newhabit(),
     );
