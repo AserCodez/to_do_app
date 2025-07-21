@@ -21,12 +21,40 @@ class _HabitsScreenState extends State<HabitsScreen> {
     }
   }
 
-  void _addNewHabit() {
+  void _openAddNewHabitOverlay() {
     showModalBottomSheet(
-      isScrollControlled: true,
-      useSafeArea: true,//Used to make the overlay cover the whole screen
+      isScrollControlled:
+          true, //Used to make the overlay cover the whole screen
+      useSafeArea: true,
       context: context,
-      builder: (context) => Newhabit(),
+      builder: (context) => Newhabit(addNewHabit: _addNewHabit),
+    );
+  }
+
+  void _addNewHabit(Clshabits habit) {
+    setState(() {
+      dummyHabits.add(habit);
+    });
+  }
+
+  void _removeHabit(Clshabits habit) {
+    final habitIndex = dummyHabits.indexOf(habit);
+
+    setState(() {
+      dummyHabits.remove(habit);
+    });
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        duration: Duration(seconds: 5),
+        content: Text('Deletion of Item has been done sucessfully'),
+        action: SnackBarAction(
+          label: 'UNDO',
+          onPressed: () {
+            dummyHabits.insert(habitIndex, habit);
+          },
+        ),
+      ),
     );
   }
 
@@ -37,6 +65,7 @@ class _HabitsScreenState extends State<HabitsScreen> {
         recivedList: dummyHabits,
         onHabitChecked: isHabitChecked,
         recivedType: TypeOfCard.uncheckedHabits,
+        onRemovedHabit: _removeHabit,
       ),
       Statsscreen(),
     ];
@@ -74,7 +103,9 @@ class _HabitsScreenState extends State<HabitsScreen> {
       body: activeScreen[selectedIndex],
       appBar: AppBar(
         title: Text('HABIT TRACKER', style: GoogleFonts.lato()),
-        actions: [IconButton(onPressed: _addNewHabit, icon: Icon(Icons.add))],
+        actions: [
+          IconButton(onPressed: _openAddNewHabitOverlay, icon: Icon(Icons.add)),
+        ],
       ),
     );
   }

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:to_do_app/Data_Models/clsHabits.dart';
 import 'package:to_do_app/DummyData/dummyData.dart';
@@ -12,8 +14,7 @@ class Statsscreen extends StatefulWidget {
 
 class _StatsscreenState extends State<Statsscreen> {
   String _order = 'asc';
-      IconData sortIcon = Icons.arrow_upward;
-
+  IconData sortIcon = Icons.arrow_upward;
 
   void issHabitChecked(Clshabits habit, bool isChecked) {}
 
@@ -37,18 +38,42 @@ class _StatsscreenState extends State<Statsscreen> {
     }
   }
 
+  void _removeCheckHabit(Clshabits habit) {
+    final habitIndex = checkedHabits.indexOf(habit);
+
+    setState(() {
+      checkedHabits.remove(habit);
+    });
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        duration: Duration(seconds: 5),
+        content: Text('CHECKED HABIT WAS REMOVED SUCESSFULLY'),
+        action: SnackBarAction(
+          label: 'UNDO',
+          onPressed: () {
+            setState(() {
+              checkedHabits.insert(habitIndex, habit);
+            });
+          },
+        ),
+      ),
+    );
+  }
+
   void _changeState() {
     _order = _order == 'asc' ? 'desc' : 'asc';
   }
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       body: Column(
         children: [
           TextButton.icon(
-            icon: Icon(_order=='asc'? Icons.arrow_upward : Icons.arrow_downward ),
+            icon: Icon(
+              _order == 'asc' ? Icons.arrow_upward : Icons.arrow_downward,
+            ),
             onPressed: () {
               _sortHabits();
             },
@@ -59,6 +84,7 @@ class _StatsscreenState extends State<Statsscreen> {
               recivedList: checkedHabits,
               onHabitChecked: issHabitChecked,
               recivedType: TypeOfCard.checkedHabits,
+              onRemovedHabit: _removeCheckHabit,
             ),
           ),
         ],

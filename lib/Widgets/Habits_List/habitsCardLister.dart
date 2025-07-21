@@ -11,10 +11,12 @@ class Habitscardlister extends StatelessWidget {
     required this.recivedList,
     required this.onHabitChecked,
     required this.recivedType,
+    required this.onRemovedHabit,
   });
   final TypeOfCard recivedType;
   final List<Clshabits> recivedList;
   final void Function(Clshabits habitDate, bool isChecked) onHabitChecked;
+  final void Function(Clshabits habitData) onRemovedHabit;
 
   Widget selectedCard(int index) {
     Widget selectedWidget;
@@ -33,7 +35,13 @@ class Habitscardlister extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListView.builder(
       itemCount: recivedList.length,
-      itemBuilder: (context, index) => selectedCard(index),
+      itemBuilder: (context, index) => Dismissible(
+        key: ValueKey(selectedCard(index)),
+        child: selectedCard(index),
+        onDismissed: (direction) {
+          onRemovedHabit(recivedList[index]);
+        },
+      ),
     );
   }
 }
